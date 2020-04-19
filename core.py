@@ -305,7 +305,6 @@ def group_file_by_size(file_list: list, max_size: int = 50331648, min_size: int 
     返回：
         文件信息列表,[(文件名,路径,总文件块数,总大小),]
         文件块列表,[(文件名,索引,文件块数,起始字节,读取字节),]
-        **文件块数为0代表不用切分文件**
     '''
     file_info = []  # 记录文件名，路径，文件切片数(不切片为0)
     group_list = []  # 记录文件分组(文件名,起始,大小,尺寸)
@@ -363,6 +362,10 @@ def group_file_by_size(file_list: list, max_size: int = 50331648, min_size: int 
                         (file_name, len(file_info), piece, start, size)
                     ]
                     file_info.append((file_name, file_path, piece, f_size))
+
+                    if not file_list:
+                        # 已经是最后一个文件
+                        group_list.append(group)
 
         else:
             # 已经有文件的空间
