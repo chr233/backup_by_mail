@@ -4,6 +4,7 @@ import smtplib
 from datetime import datetime
 from time import sleep
 from pathlib import Path, PurePath
+import locale
 
 from email.header import Header
 from email.mime.text import MIMEText
@@ -12,6 +13,7 @@ from email.mime.application import MIMEApplication
 
 from config import *
 
+locale.setlocale(locale.LC_CTYPE, 'chinese')
 
 def size2str(size: float) -> str:
     '''将字节转换成合适的单位
