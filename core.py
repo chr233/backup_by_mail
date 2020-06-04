@@ -13,7 +13,8 @@ from email.mime.application import MIMEApplication
 
 from config import *
 
-locale.setlocale(locale.LC_CTYPE, 'chinese')
+if platform.uname().system == "Windows":
+    locale.setlocale(locale.LC_CTYPE, 'chinese')
 
 def size2str(size: float) -> str:
     '''将字节转换成合适的单位
