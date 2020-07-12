@@ -6,7 +6,7 @@ smtp_port = 465
 
 # 发件邮箱，收件邮箱
 email_sender = 'xxxxxx@qq.com'
-email_reveive = 'xxxxxx@qq.com'
+email_receiver = 'xxxxxx@qq.com'
 
 # 收发人昵称，可以为空
 email_from = '邮件备份工具'
