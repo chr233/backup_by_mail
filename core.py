@@ -1,3 +1,4 @@
+from typing import Tuple
 import psutil
 import platform
 import smtplib
@@ -40,32 +41,32 @@ def size2str(size: float) -> str:
     integer, remainder, level = sos(size, 0, 0)
     if level+1 > len(units):
         level = -1
-    return (f'{integer}.{str(remainder)[:2]}{units[level]}')
+    return f'{integer}.{str(remainder)[:2]}{units[level]}'
 
 
 def now():
-    return(datetime.now())
+    return datetime.now()
 
 
 def datetime2str(date: datetime) -> str:
     '''格式化日期和时间'''
-    return(date.strftime("%Y年%m月%d日 %H:%M:%S"))
+    return date.strftime("%Y年%m月%d日 %H:%M:%S")
 
 
 def date2str(date: datetime) -> str:
     '''格式化日期'''
-    return(date.strftime("%Y年%m月%d日"))
+    return date.strftime("%Y年%m月%d日")
 
 
 def time2str(date: datetime) -> str:
     '''格式化时间'''
-    return(date.strftime("%H:%M:%S"))
+    return date.strftime("%H:%M:%S")
 
 
 def get_host_name() -> str:
     '''返回主机名，优先返回config里设置的主机名'''
     name = host_name if host_name else platform.uname().node
-    return(name)
+    return name
 
 
 def send_email(subject: str, message: str, attact_list: list = []):
@@ -94,7 +95,7 @@ def send_email(subject: str, message: str, attact_list: list = []):
         smtpObj.sendmail(email_sender, email_receiver, mailobj.as_string())
 
 
-def gen_sys_info() -> (str, list):
+def gen_sys_info() -> Tuple[str, list]:
     '''生成简单的系统状态文本，会产生5秒延时
     返回：
         系统状态清单
@@ -233,7 +234,7 @@ def gen_file_info(file_info: list) -> str:
            f'{"".join(info_list)}'
            f'{f"总计[{i}]个文件，占用[{size2str(total)}]空间".center(50,"=")}\n'
            )
-    return(msg)
+    return msg
 
 
 def gen_pack_info(file_group: list) -> str:
@@ -256,7 +257,7 @@ def gen_pack_info(file_group: list) -> str:
            f'{"".join(info_list)}'
            f'{f"总计[{i}]个文件，占用【{size2str(total)}】空间".center(50,"=")}\n'
            )
-    return(msg)
+    return msg
 
 
 def gen_hash_md5(file) -> str:
@@ -267,29 +268,21 @@ def gen_hash_md5(file) -> str:
     '''
     md5obj = hashlib.md5()
     md5obj.update(file)
-    return(md5obj.hexdigest())
+    return md5obj.hexdigest()
 
 
 def gen_hash_sha1(file) -> str:
-    '''生成文件SHA1
-    参数：
-        bin：二进制对象
-    返回：
-    '''
+    '''生成文件SHA1'''
     sha1obj = hashlib.sha1()
     sha1obj.update(file)
-    return(sha1obj.hexdigest())
+    return sha1obj.hexdigest()
 
 
 def gen_hash_sha256(file) -> str:
-    '''生成文件SHA256
-    参数：
-        bin：二进制对象
-    返回：
-    '''
+    '''生成文件SHA256'''
     sha256obj = hashlib.sha256()
     sha256obj.update(file)
-    return(sha256obj.hexdigest())
+    return sha256obj.hexdigest()
 
 
 def pack_file(file_info, file_group) -> list:
@@ -316,7 +309,7 @@ def pack_file(file_info, file_group) -> list:
             print(f'**文件{name}不存在**')
         except IndexError:
             print('**索引越界，请检查传入列表是否对应**')
-    return(pack_list)
+    return pack_list
 
 
 def sort_file_list(dir_path: list) -> list:
@@ -326,8 +319,8 @@ def sort_file_list(dir_path: list) -> list:
     返回：
         排过序的目录列表，每个元素为[(文件名,文件路径,文件尺寸),]
     '''
+    files = []
     try:
-        files = []
         with Path(dir_path) as p:
             for x in p.iterdir():
                 # 只处理文件
@@ -338,10 +331,10 @@ def sort_file_list(dir_path: list) -> list:
         files.sort(key=lambda x: x[2], reverse=True)
     except FileNotFoundError:
         print(f'**目录[{dir_path}]不存在**')
-    return(files)
+    return files
 
 
-def group_file_by_size(file_list: list, max_size: int = 50331648, min_size: int = 1048576) -> (list, list):
+def group_file_by_size(file_list: list, max_size: int = 50331648, min_size: int = 1048576) -> Tuple[list, list]:
     '''把文件切分、打包成合适的大小
     参数：
         有序文件列表(需要先按照文件尺寸排序(sort_file_list))
@@ -509,4 +502,4 @@ def group_file_by_size(file_list: list, max_size: int = 50331648, min_size: int 
                     group = []
                     used_size = 0
 
-    return((file_info, group_list))
+    return (file_info, group_list)
