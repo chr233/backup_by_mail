@@ -1,10 +1,11 @@
 import psutil
 import platform
 import smtplib
+import hashlib
 from datetime import datetime
 from time import sleep
 from pathlib import Path, PurePath
-import hashlib
+from distro import linux_distribution
 
 from email.utils import formataddr
 from email.header import Header
@@ -128,7 +129,7 @@ def gen_sys_info() -> (str, list):
     sys_hostname = uname.node
     sys_type = uname.system
     if sys_type == 'Linux':
-        sys_version = ' '.join(platform.dist())
+        sys_version = ' '.join(linux_distribution())
     else:
         sys_version = f'{uname.system} {uname.version}'
 
