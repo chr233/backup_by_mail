@@ -156,7 +156,8 @@ def gen_sys_info() -> Tuple[str, list]:
             d_total = usage.total
             d_used = usage.used
             d_percent = usage.percent
-            disk_percent.append(d_percent)
+            if not str(d.mountpoint).startswith('/snap/'):
+                disk_percent.append(d_percent)
             disk_info.append(
                 f'磁盘{d.mountpoint.ljust(9)}: '
                 f'{graph_process(d_percent)} '
